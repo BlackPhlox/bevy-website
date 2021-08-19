@@ -1,3 +1,4 @@
+use cratesio_dbdump_csvtab::{rusqlite::Connection, CratesIODumpLoader, Error};
 use rand::{prelude::SliceRandom, thread_rng};
 use serde::Serialize;
 use std::{
@@ -12,10 +13,25 @@ fn main() -> io::Result<()> {
     let asset_dir = std::env::args().nth(1).unwrap();
     let content_dir = std::env::args().nth(2).unwrap();
     let _ = fs::create_dir(content_dir.clone());
-    let asset_root_section = parse_assets(&asset_dir)?;
 
+    let db = &get_db().unwrap();
+    let asset_root_section = parse_assets(&asset_dir, db)?;
     asset_root_section.write(Path::new(&content_dir), Path::new(""), 0)?;
     Ok(())
+}
+
+fn get_db() -> Result<Connection, Error> {
+    CratesIODumpLoader::default()
+        .tables(&[
+            "crates",
+            "dependencies",
+            "versions",
+            "crates_keywords",
+            "keywords",
+        ])
+        .preload(true)
+        .update()?
+        .open_db()
 }
 
 trait FrontMatterWriter {
@@ -34,6 +50,12 @@ struct FrontMatterAsset {
 struct FrontMatterAssetExtra {
     link: String,
     image: Option<String>,
+    tags: Vec<String>,
+    downloads: u32,
+    repo_url: Option<String>,
+    homepage_url: Option<String>,
+    last_update: String,
+    dependencies: Vec<(String, String, String)>,
 }
 
 impl From<&Asset> for FrontMatterAsset {
@@ -45,6 +67,12 @@ impl From<&Asset> for FrontMatterAsset {
             extra: FrontMatterAssetExtra {
                 link: asset.link.clone(),
                 image: asset.image.clone(),
+                tags: asset.tags.clone(),
+                downloads: asset.downloads,
+                repo_url: asset.repo_url.clone(),
+                homepage_url: asset.homepage_url.clone(),
+                last_update: asset.last_update.clone(),
+                dependencies: asset.dependencies.clone(),
             },
         }
     }

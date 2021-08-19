@@ -11,7 +11,9 @@
             <div class="card-description">
                 {{ post.description | striptags | truncate(length=100) | safe }}
             </div>
+            <div style="font-size:10px;color:#799BBB"> {{ post.extra.tags }} - {{ post.extra.downloads }} - {{ post.extra.dependencies }}</div>
         </div>
+        
     </a>
 </div>
 {% endmacro card %}

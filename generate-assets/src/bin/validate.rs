@@ -1,10 +1,12 @@
+use cratesio_dbdump_csvtab::{rusqlite::Connection, CratesIODumpLoader, Error};
 use regex::Regex;
 
 use generate_assets::*;
 
 fn main() -> Result<(), ()> {
     let asset_dir = std::env::args().nth(1).unwrap();
-    if let Ok(asset_root_section) = parse_assets(&asset_dir) {
+    let db = get_dummy_db().unwrap();
+    if let Ok(asset_root_section) = parse_assets(&asset_dir, &db) {
         if asset_root_section.validate() {
             Ok(())
         } else {
@@ -13,6 +15,14 @@ fn main() -> Result<(), ()> {
     } else {
         Err(())
     }
+}
+
+fn get_dummy_db() -> Result<Connection, Error> {
+    CratesIODumpLoader::default()
+        .tables(&[])
+        .preload(true)
+        .update()?
+        .open_db()
 }
 
 trait AssetValidator {
@@ -76,7 +86,7 @@ impl AssetValidator for Asset {
             }
         }
 
-        return valid;
+        valid
     }
 }
 
@@ -92,5 +102,5 @@ fn has_forbidden_formatting(string: &str) -> bool {
         return true;
     }
 
-    return false;
+    false
 }

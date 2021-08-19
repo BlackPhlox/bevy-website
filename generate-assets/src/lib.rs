@@ -1,3 +1,5 @@
+use cratesio_dbdump_csvtab::rusqlite::Connection;
+use populate_crate_metadata::get_crate;
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf, str::FromStr};
 
@@ -13,6 +15,18 @@ pub struct Asset {
     // this field is not read from the toml file
     #[serde(skip)]
     pub original_path: Option<PathBuf>,
+    #[serde(skip)]
+    pub tags: Vec<String>,
+    #[serde(skip)]
+    pub dependencies: Vec<(String, String, String)>,
+    #[serde(skip)]
+    pub downloads: u32,
+    #[serde(skip)]
+    pub repo_url: Option<String>,
+    #[serde(skip)]
+    pub homepage_url: Option<String>,
+    #[serde(skip)]
+    pub last_update: String,
 }
 
 #[derive(Debug, Clone)]
@@ -45,7 +59,7 @@ impl AssetNode {
     }
 }
 
-fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
+fn visit_dirs(dir: PathBuf, section: &mut Section, db: &Connection) -> io::Result<()> {
     if dir.is_dir() {
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
@@ -81,7 +95,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                     order,
                     sort_order_reversed,
                 };
-                visit_dirs(path.clone(), &mut new_section)?;
+                visit_dirs(path.clone(), &mut new_section, db)?;
                 section.content.push(AssetNode::Section(new_section));
             } else {
                 if path.file_name().unwrap() == "_category.toml"
@@ -92,6 +106,9 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
                 let mut asset: Asset =
                     toml::de::from_str(&fs::read_to_string(&path).unwrap()).unwrap();
                 asset.original_path = Some(path);
+
+                populate_with_crate_io_data(db, &mut asset);
+
                 section.content.push(AssetNode::Asset(asset));
             }
         }
@@ -99,7 +116,22 @@ fn visit_dirs(dir: PathBuf, section: &mut Section) -> io::Result<()> {
     Ok(())
 }
 
-pub fn parse_assets(asset_dir: &str) -> io::Result<Section> {
+fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
+    let co = get_crate(db, &asset.name);
+    if let Ok(Some(c)) = co {
+        if asset.description.is_empty() {
+            asset.description = c.disc;
+        }
+        asset.homepage_url = c.homepage_url;
+        asset.last_update = c.last_update;
+        asset.downloads = c.downloads;
+        asset.tags = c.tags;
+        asset.repo_url = c.repo_url;
+        asset.dependencies = c.dependencies;
+    }
+}
+
+pub fn parse_assets(asset_dir: &str, db: &Connection) -> io::Result<Section> {
     let mut asset_root_section = Section {
         name: "Assets".to_string(),
         content: vec![],
@@ -109,8 +141,9 @@ pub fn parse_assets(asset_dir: &str) -> io::Result<Section> {
         sort_order_reversed: false,
     };
     visit_dirs(
-        PathBuf::from_str(&asset_dir).unwrap(),
+        PathBuf::from_str(asset_dir).unwrap(),
         &mut asset_root_section,
+        db,
     )?;
     Ok(asset_root_section)
 }

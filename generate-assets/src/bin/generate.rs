@@ -1,4 +1,5 @@
 use cratesio_dbdump_csvtab::{rusqlite::Connection, CratesIODumpLoader, Error};
+use cratesio_dbdump_lookup::CrateDependency;
 use rand::{prelude::SliceRandom, thread_rng};
 use serde::Serialize;
 use std::{
@@ -55,7 +56,7 @@ struct FrontMatterAssetExtra {
     repo_url: Option<String>,
     homepage_url: Option<String>,
     last_update: String,
-    dependencies: Vec<(String, String, String)>,
+    dependencies: Vec<CrateDependency>,
 }
 
 impl From<&Asset> for FrontMatterAsset {

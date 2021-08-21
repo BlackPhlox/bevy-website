@@ -267,6 +267,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "cratesio-dbdump-lookup"
+version = "0.1.0"
+source = "git+https://github.com/BlackPhlox/cratesio-dbdump-lookup#f07bfe174be0573eeec9aaf2a81509c7aba7b61c"
+dependencies = [
+ "color-eyre",
+ "cratesio-dbdump-csvtab",
+ "serde",
+ "thiserror",
+ "tracing",
+ "tracing-error",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "crc32fast"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -462,7 +476,7 @@ name = "generate-assets"
 version = "0.1.0"
 dependencies = [
  "cratesio-dbdump-csvtab",
- "populate-crate-metadata",
+ "cratesio-dbdump-lookup",
  "rand",
  "regex",
  "reqwest",
@@ -505,9 +519,9 @@ checksum = "9b919933a397b79c37e33b77bb2aa3dc8eb6e165ad809e58ff75bc7db2e34574"
 
 [[package]]
 name = "h2"
-version = "0.3.3"
+version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "825343c4eef0b63f541f8903f395dc5beb362a979b5799a84062527ef1e37726"
+checksum = "d7f3675cfef6a30c8031cf9e6493ebdc3bb3272a3fea3923c4210d1830e6a472"
 dependencies = [
  "bytes",
  "fnv",
@@ -688,9 +702,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libc"
-version = "0.2.99"
+version = "0.2.100"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a7f823d141fe0a24df1e23b4af4e3c7ba9e5966ec514ea068c93024aa7deb765"
+checksum = "a1fa8cddc8fbbee11227ef194b5317ed014b8acbf15139bd716a18ad3fe99ec5"
 
 [[package]]
 name = "libsqlite3-sys"
@@ -916,19 +930,6 @@ name = "pkg-config"
 version = "0.3.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3831453b3449ceb48b6d9c7ad7c96d5ea673e9b470a1dc578c2ce6521230884c"
-
-[[package]]
-name = "populate-crate-metadata"
-version = "0.1.0"
-source = "git+https://github.com/BlackPhlox/populate-crate-metadata#8d77c6fe020059e56ec2ca7bd7fd2b3bb5016b74"
-dependencies = [
- "color-eyre",
- "cratesio-dbdump-csvtab",
- "thiserror",
- "tracing",
- "tracing-error",
- "tracing-subscriber",
-]
 
 [[package]]
 name = "ppv-lite86"
@@ -1224,9 +1225,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.74"
+version = "1.0.75"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1873d832550d4588c3dbc20f01361ab00bfe741048f71e3fecf145a7cc18b29c"
+checksum = "b7f58f7e8eaa0009c5fec437aabf511bd9933e4b2d7407bd05273c01a8906ea7"
 dependencies = [
  "proc-macro2",
  "quote",

@@ -1,5 +1,5 @@
 use cratesio_dbdump_csvtab::rusqlite::Connection;
-use populate_crate_metadata::get_crate;
+use cratesio_dbdump_lookup::{CrateDependency, CrateLookup};
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf, str::FromStr};
 
@@ -18,7 +18,7 @@ pub struct Asset {
     #[serde(skip)]
     pub tags: Vec<String>,
     #[serde(skip)]
-    pub dependencies: Vec<(String, String, String)>,
+    pub dependencies: Vec<CrateDependency>,
     #[serde(skip)]
     pub downloads: u32,
     #[serde(skip)]
@@ -117,15 +117,15 @@ fn visit_dirs(dir: PathBuf, section: &mut Section, db: &Connection) -> io::Resul
 }
 
 fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
-    let co = get_crate(db, &asset.name);
+    let co = db.get_crate(&asset.name);
     if let Ok(Some(c)) = co {
         if asset.description.is_empty() {
-            asset.description = c.disc;
+            asset.description = c.description;
         }
         asset.homepage_url = c.homepage_url;
         asset.last_update = c.last_update;
         asset.downloads = c.downloads;
-        asset.tags = c.tags;
+        asset.tags = c.keywords;
         asset.repo_url = c.repo_url;
         asset.dependencies = c.dependencies;
     }

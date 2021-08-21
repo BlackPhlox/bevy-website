@@ -11,9 +11,14 @@
             <div class="card-description">
                 {{ post.description | striptags | truncate(length=100) | safe }}
             </div>
-            <div style="font-size:10px;color:#799BBB"> {{ post.extra.tags }} - {{ post.extra.downloads }} - {{ post.extra.dependencies }}</div>
+            <div style="font-size:10px;color:#799BBB"> 
+                {{ post.extra.tags }} - {{ post.extra.downloads }} -
+                {% for dep in post.extra.dependencies %}
+                    {% if dep.crate_id != "bevy" %}{% break %}{% endif %}
+                    {{ dep.crate_id }}({{ dep.version }})
+                {% endfor %}
+            </div>
         </div>
-        
     </a>
 </div>
 {% endmacro card %}

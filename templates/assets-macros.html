@@ -2,9 +2,13 @@
 <div class="card" id="{{ post.title | slugify }}">
     <a href="{{ post.extra.link }}">
         {% if post.extra.image %}
-        <div class="card-image card-image-default">
-            <img src="{{ get_url(path=post.extra.image) }}" />
-        </div>
+            <div class="card-image card-image-default">
+                <img src="{{ get_url(path=post.extra.image) }}" />
+            </div>
+        {% else %}
+            <div class="card-image card-image-default">
+                <img src="https://via.placeholder.com/230x100" />
+            </div>
         {% endif %}
         <div class="card-text">
             <div class="card-title">{{ post.title }}</div>

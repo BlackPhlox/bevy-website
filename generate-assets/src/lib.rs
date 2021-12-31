@@ -125,9 +125,25 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
         asset.homepage_url = c.homepage_url;
         asset.last_update = c.last_update;
         asset.downloads = c.downloads;
-        asset.tags = c.keywords.into_iter().filter(|s| !(s.eq("bevy") || s.eq("bevyengine") || s.eq("gamedev"))).collect();
+        asset.tags = c
+            .keywords
+            .into_iter()
+            .filter(|s| !(s.eq("bevy") || s.eq("bevyengine") || s.eq("gamedev") || s.eq("game")))
+            .collect();
         asset.repo_url = c.repo_url;
-        asset.dependencies = c.dependencies;
+        let mut crate_dependencies = c.dependencies;
+
+        //Removes features version duplicates and Crate dependency kinds (Dev & Normal)
+        crate_dependencies.dedup_by_key(|cd| format!("{}{}", cd.crate_id, cd.version));
+
+        asset.dependencies = crate_dependencies
+            .into_iter()
+            .map(|f| CrateDependency {
+                crate_id: f.crate_id,
+                version: f.version.replace("^", ""),
+                kind: f.kind,
+            })
+            .collect()
     }
 }
 

@@ -1,15 +1,13 @@
 {% macro card(post) %}
 <div class="card" id="{{ post.title | slugify }}">
     <a href="{{ post.extra.link }}">
+        <div class="card-image card-image-default">
         {% if post.extra.image %}
-            <div class="card-image card-image-default">
-                <img src="{{ get_url(path=post.extra.image) }}" />
-            </div>
+            <img src="{{ get_url(path=post.extra.image) }}" />
         {% else %}
-            <div class="card-image card-image-default">
-                <img src="https://via.placeholder.com/230x100" />
-            </div>
+            <img src="https://via.placeholder.com/230x100" />
         {% endif %}
+        </div>
         <div class="card-text">
             <div class="card-title">{{ post.title }}</div>
             <div class="card-description">

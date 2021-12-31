@@ -125,7 +125,7 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
         asset.homepage_url = c.homepage_url;
         asset.last_update = c.last_update;
         asset.downloads = c.downloads;
-        asset.tags = c.keywords;
+        asset.tags = c.keywords.into_iter().filter(|s| !(s.eq("bevy") || s.eq("bevyengine") || s.eq("gamedev"))).collect();
         asset.repo_url = c.repo_url;
         asset.dependencies = c.dependencies;
     }

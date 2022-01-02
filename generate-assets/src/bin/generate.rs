@@ -17,6 +17,9 @@ fn main() -> io::Result<()> {
 
     let db = &get_db().unwrap();
     let asset_root_section = parse_assets(&asset_dir, db)?;
+
+    //Remove if folder already exist
+    let _ = fs::remove_dir_all(format!("{}/{}", &content_dir, "assets"));
     asset_root_section.write(Path::new(&content_dir), Path::new(""), 0)?;
     Ok(())
 }
@@ -56,6 +59,8 @@ struct FrontMatterAssetExtra {
     repo_url: Option<String>,
     homepage_url: Option<String>,
     last_update: String,
+    latest_version: String,
+    license: String,
     dependencies: Vec<CrateDependency>,
 }
 
@@ -73,6 +78,8 @@ impl From<&Asset> for FrontMatterAsset {
                 repo_url: asset.repo_url.clone(),
                 homepage_url: asset.homepage_url.clone(),
                 last_update: asset.last_update.clone(),
+                latest_version: asset.latest_version.clone(),
+                license: asset.license.clone(),
                 dependencies: asset.dependencies.clone(),
             },
         }

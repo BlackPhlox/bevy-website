@@ -54,6 +54,8 @@ struct FrontMatterAsset {
 struct FrontMatterAssetExtra {
     link: String,
     image: Option<String>,
+    color: Option<String>,
+    emoji: Option<String>,
     tags: Vec<String>,
     downloads: u32,
     repo_url: Option<String>,
@@ -73,6 +75,7 @@ impl From<&Asset> for FrontMatterAsset {
             extra: FrontMatterAssetExtra {
                 link: asset.link.clone(),
                 image: asset.image.clone(),
+                color: asset.color.clone(),
                 tags: asset.tags.clone(),
                 downloads: asset.downloads,
                 repo_url: asset.repo_url.clone(),
@@ -81,6 +84,7 @@ impl From<&Asset> for FrontMatterAsset {
                 latest_version: asset.latest_version.clone(),
                 license: asset.license.clone(),
                 dependencies: asset.dependencies.clone(),
+                emoji: asset.emoji.clone()
             },
         }
     }

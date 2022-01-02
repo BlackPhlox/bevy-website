@@ -1,5 +1,6 @@
 use cratesio_dbdump_csvtab::rusqlite::Connection;
 use cratesio_dbdump_lookup::{get_versions, CrateDependency, CrateLookup};
+use rand::{thread_rng, Rng};
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf, str::FromStr};
 
@@ -11,6 +12,8 @@ pub struct Asset {
     pub description: String,
     pub order: Option<usize>,
     pub image: Option<String>,
+    pub color: Option<String>,
+    pub emoji: Option<String>,
 
     // this field is not read from the toml file
     #[serde(skip)]
@@ -121,6 +124,12 @@ fn visit_dirs(dir: PathBuf, section: &mut Section, db: &Connection) -> io::Resul
 }
 
 fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
+    if asset.image.is_none() && asset.emoji.is_none() {
+        let emoji_code: u32 = thread_rng().gen_range(0x1F600..0x1F64F);
+        let emoji = char::from_u32(emoji_code).unwrap_or('💔');
+        asset.emoji = Some(emoji.to_string());
+    }
+    
     let co = db.get_crate(&asset.name);
     if let Ok(Some(c)) = co {
         let latest_version = &get_versions(&db, asset.name.to_string(), true).unwrap()[0];

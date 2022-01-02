@@ -1,11 +1,16 @@
 {% macro card(post) %}
 <div class="card" id="{{ post.title | slugify }}">
     <a href="{{ post.extra.link }}">
-        <div class="card-image card-image-default">
+        <div class="card-image card-image-default" {% if post.extra.color %} style="
+        background-color: {{post.extra.color}};"{% endif %}>
         {% if post.extra.image %}
             <img src="{{ get_url(path=post.extra.image) }}" />
         {% else %}
+            {% if post.extra.emoji %}
+            <div style="font-size:5rem;width:100%;text-align:center;">{{post.extra.emoji}}</div>
+            {% else %}
             <img src="https://via.placeholder.com/230x100" />
+            {% endif %}
         {% endif %}
         </div>
         <div class="card-text">

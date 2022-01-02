@@ -1,7 +1,7 @@
 {% macro card(post) %}
 <div class="card" id="{{ post.title | slugify }}">
     <a href="{{ post.extra.link }}">
-        <div class="card-image card-image-default" {% if post.extra.color %} style="
+        <div class="card-asset-image card-asset-image-default" {% if post.extra.color %} style="
         background-color: {{post.extra.color}};"{% endif %}>
         {% if post.extra.image %}
             <img src="{{ get_url(path=post.extra.image) }}" />

@@ -17,5 +17,5 @@ A local server should start and you should be able to access a local version of 
 
 ### Assets generation
 
-Assets are generated using data from /generate/assets and crates.io using their dump trough [populate-crate-metadata](https://github.com/alyti/populate-crate-metadata).
+Assets are generated using data from /generate/assets and crates.io using their dump trough [cratesio-dbdump-lookup](https://github.com/alyti/cratesio-dbdump-lookup).
 Please notice when unpacked, the crates.io dump fills about 500 mb.

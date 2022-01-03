@@ -13,17 +13,60 @@
             {% endif %}
         {% endif %}
         </div>
-        <div class="card-text">
-            <div class="card-title">{{ post.title }}</div>
+
+        <div style="background-color: rgba(0, 0, 0, 0.2); height: 26px;color: white;padding-left:0.7rem;padding-right:0.7rem;margin-top: -26px;">{{ post.title }}</div>
+
+        <div class="card-text card-asset-text">
+            <!--<div class="card-title">{{ post.title }}</div>-->
             <div class="card-description">
                 {{ post.description | striptags | truncate(length=100) | safe }}
             </div>
-            <div style="font-size:10px;color:#799BBB"> 
-                {{ post.extra.tags }} - {{ post.extra.downloads }} -
+
+            <div>
+            <div>
                 {% for dep in post.extra.dependencies %}
                     {% if dep.crate_id != "bevy" %}{% break %}{% endif %}
-                    {{ dep.crate_id }}({{ dep.version }})
+                    <div class="chip">
+                        <span class="chip-content">{{ dep.version }}</span>
+                    </div> 
                 {% endfor %}
+                {% for tag in post.extra.tags %}
+                    <div class="chip">
+                        <span class="chip-content">{{ tag }}</span>
+                    </div> 
+                {% endfor %}
+            </div>
+            
+            <div style="font-size:10px; padding-top: 5px;">
+                {% if post.extra.downloads %}
+                <div style="color: white; ">
+                    <img src="assets/download.svg" style="width: 15px;vertical-align: middle;"></img>
+                    {{ post.extra.downloads }}
+                </div>
+                {% endif %}
+
+                {% if post.extra.last_update %}
+                    <div class="last-update last-update-tooltip" style="padding-top: 2.5px;">
+                        <img src="assets/last_update.svg" style="width: 15px;vertical-align: middle;"></img>
+                        <span class="last-update-tooltiptext" id="{{ post.title | slugify }}-date-tt"></span>
+                        <div id="{{ post.title | slugify }}-date"></div>
+                        <script>
+                            var date_since_display = document.getElementById('{{ post.title | slugify }}-date');
+                            var date_since_tooltip = document.getElementById('{{ post.title | slugify }}-date-tt');
+                            var updated_date = new Date({{post.extra.last_update}} * 1000);                       
+                            date_since_display.innerHTML = getSince(updated_date);
+                            date_since_tooltip.innerHTML = updated_date.toDateString();
+                        </script>
+                    </div>
+                {% endif %}
+
+                {% if post.extra.last_update %}
+                    <div style="color: white;">
+                        <img src="assets/license2.svg" style="width: 15px;vertical-align: middle;"></img>
+                        {{ post.extra.license }}
+                    </div>
+                {% endif %}
+            </div>
             </div>
         </div>
     </a>

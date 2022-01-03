@@ -15,11 +15,12 @@ $default-image-background-color: #1b1b1b;
 $card-hover-background: #2f3033;
 $media-max-width: 1000px;
 $border-radius: 10px;
-$card-width: 23.35%;
-$card-height: 18rem;
+$card-width: 31.7%;
+$card-height: 17rem;
 $card-img-height: 50%;
 $card-list-gap: 15px;
 
+@import "tag";
 @import "syntax-theme";
 @import "headerbar";
 @import "community";

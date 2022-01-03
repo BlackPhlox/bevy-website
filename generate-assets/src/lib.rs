@@ -2,7 +2,7 @@ use cratesio_dbdump_csvtab::rusqlite::Connection;
 use cratesio_dbdump_lookup::{get_versions, CrateDependency, CrateLookup};
 use rand::{thread_rng, Rng};
 use serde::Deserialize;
-use std::{fs, io, path::PathBuf, str::FromStr};
+use std::{fs, io, path::PathBuf, str::FromStr, fmt::Display};
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields)]
@@ -29,7 +29,7 @@ pub struct Asset {
     #[serde(skip)]
     pub homepage_url: Option<String>,
     #[serde(skip)]
-    pub last_update: String,
+    pub last_update: i64,
     #[serde(skip)]
     pub latest_version: String,
     #[serde(skip)]
@@ -129,7 +129,7 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
         let emoji = char::from_u32(emoji_code).unwrap_or('💔');
         asset.emoji = Some(emoji.to_string());
     }
-    
+
     let co = db.get_crate(&asset.name);
     if let Ok(Some(c)) = co {
         let latest_version = &get_versions(&db, asset.name.to_string(), true).unwrap()[0];
@@ -140,7 +140,12 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
             asset.description = c.description;
         }
         asset.homepage_url = c.homepage_url;
-        asset.last_update = c.last_update;
+        let dt = chrono::NaiveDateTime::parse_from_str(c.last_update.as_str(),"%Y-%m-%d %H:%M:%S%.6f");
+        if let Ok(dtime) = dt {
+            asset.last_update = dtime.format("%s").to_string().parse().unwrap();
+        } else {
+            println!("{:?}", dt.unwrap_err());
+        }
         asset.downloads = c.downloads;
         asset.tags = c
             .keywords
@@ -155,11 +160,18 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
 
         asset.dependencies = crate_dependencies
             .into_iter()
-            .map(|f| CrateDependency {
-                crate_id: f.crate_id,
-                version: f.version.replace("^", ""),
-                kind: f.kind,
-            })
+            .map(|f| { 
+                let is_bevy = f.crate_id.eq("bevy") && f.version.ends_with(".0");
+                let v = if is_bevy {
+                    f.version[..f.version.len()-2].to_string()
+                } else {
+                    f.version
+                }.replace("^", "");
+                CrateDependency {
+                    crate_id: f.crate_id,
+                    version: v,
+                    kind: f.kind,
+            }})
             .collect()
     }
 }

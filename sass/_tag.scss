@@ -1,0 +1,20 @@
+.chip {
+    display: inline-flex;
+    padding: 0 8px;
+    vertical-align: middle;
+    color: white;
+    background-color: #799BBB;
+    height: 24px;
+    font-size: 12px;
+    border-radius: 12px;    
+}
+
+.chip :hover {
+    background-color: rgba(0, 132, 255, 0.555);
+    border-radius: 12px; 
+}
+
+.chip-content{
+    align-items: center;
+    display: inline-flex;
+}

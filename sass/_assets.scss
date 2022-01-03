@@ -28,6 +28,42 @@
         max-height: 100%;
     }
 
+    .card-asset-text{
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+    }
+
+    .last-update{
+        color: white;display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 5px;
+    }
+
+    .last-update-tooltip {
+        position: relative;
+    }
+    
+    .last-update-tooltip .last-update-tooltiptext {
+        visibility: hidden;
+        width: 90px;
+        background-color: #232326;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+    }
+    
+    .last-update-tooltip:hover .last-update-tooltiptext {
+        visibility: visible;
+    }
+
     a {
         text-decoration: none;
     }

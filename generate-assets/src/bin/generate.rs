@@ -60,7 +60,7 @@ struct FrontMatterAssetExtra {
     downloads: u32,
     repo_url: Option<String>,
     homepage_url: Option<String>,
-    last_update: String,
+    last_update: i64,
     latest_version: String,
     license: String,
     dependencies: Vec<CrateDependency>,
@@ -84,7 +84,7 @@ impl From<&Asset> for FrontMatterAsset {
                 latest_version: asset.latest_version.clone(),
                 license: asset.license.clone(),
                 dependencies: asset.dependencies.clone(),
-                emoji: asset.emoji.clone()
+                emoji: asset.emoji.clone(),
             },
         }
     }

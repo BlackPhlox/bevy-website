@@ -4,7 +4,7 @@ function diff_year_month_day(dt1, dt2)
     var year  = Math.abs(Math.round((time/(60 * 60 * 24))/365.25));
     var month = Math.abs(Math.round(time/(60 * 60 * 24 * 7 * 4)));
     var days = Math.abs(Math.round(time/(3600 * 24)));
-    return [year, month, days];//"Year :- " + year + " Month :- " + month + " Days :-" + days;
+    return [year, month, days];
 }
 
 

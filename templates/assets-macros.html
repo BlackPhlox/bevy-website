@@ -25,7 +25,7 @@
             <div>
             <div>
                 {% for dep in post.extra.dependencies %}
-                    {% if dep.crate_id != "bevy" %}{% break %}{% endif %}
+                    {% if dep.crate_id != "bevy" and dep.crate_id != "bevy_app" %}{% break %}{% endif %}
                     <div class="chip">
                         <span class="chip-content">{{ dep.version }}</span>
                     </div> 

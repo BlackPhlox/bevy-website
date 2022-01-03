@@ -31,6 +31,7 @@ $book-nav-width: 210px;
     display: block;
     padding-left: 10px;
     padding-top: 40px;
+    /*TODO: Do something like this but with proper phone support:*/ position: fixed;
 }
 
 .book-nav-section {

@@ -161,7 +161,7 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
         asset.dependencies = crate_dependencies
             .into_iter()
             .map(|f| { 
-                let is_bevy = f.crate_id.eq("bevy") && f.version.ends_with(".0");
+                let is_bevy = (f.crate_id.eq("bevy") || f.crate_id.eq("bevy_app")) && f.version.ends_with(".0");
                 let v = if is_bevy {
                     f.version[..f.version.len()-2].to_string()
                 } else {

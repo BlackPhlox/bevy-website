@@ -21,6 +21,7 @@ fn main() -> io::Result<()> {
     //Remove if folder already exist
     let _ = fs::remove_dir_all(format!("{}/{}", &content_dir, "assets"));
     asset_root_section.write(Path::new(&content_dir), Path::new(""), 0)?;
+    println!("Script Complete");
     Ok(())
 }
 

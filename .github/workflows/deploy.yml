@@ -24,7 +24,7 @@ jobs:
           key: ${{ runner.os }}-${{ steps.date.outputs.date }}
 
       - name: "Update cargo"
-        run: cargo update
+        run: cd generate-assets && cargo update
 
       - name: "Build Bevy Assets"
         run: cd generate-assets && ./generate_assets.sh

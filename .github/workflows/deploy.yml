@@ -23,6 +23,9 @@ jobs:
           path: generate-assets/data
           key: ${{ runner.os }}-${{ steps.date.outputs.date }}
 
+      - name: "Update cargo"
+        run: cargo update
+
       - name: "Build Bevy Assets"
         run: cd generate-assets && ./generate_assets.sh
 

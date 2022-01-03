@@ -18,4 +18,4 @@ regex = "1"
 reqwest = { version = "0.11.4", features = [ "json", "blocking" ] }
 chrono = "0.4.19"
 cratesio-dbdump-csvtab = { version = "0.2.2" }
-cratesio-dbdump-lookup = { path = "../../cratesio-dbdump-lookup" } #"0.1.1" 
+cratesio-dbdump-lookup = { git = "https://github.com/BlackPhlox/cratesio-dbdump-lookup" } #"0.1.1" 

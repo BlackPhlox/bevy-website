@@ -210,6 +210,7 @@ dependencies = [
 [[package]]
 name = "cratesio-dbdump-lookup"
 version = "0.1.1"
+source = "git+https://github.com/BlackPhlox/cratesio-dbdump-lookup#f53b6c9d6008cee9f74bddab135a8bc001d33479"
 dependencies = [
  "rusqlite",
  "serde",

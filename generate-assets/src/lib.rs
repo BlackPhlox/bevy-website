@@ -2,7 +2,7 @@ use cratesio_dbdump_csvtab::rusqlite::Connection;
 use cratesio_dbdump_lookup::{get_versions, CrateDependency, CrateLookup};
 use rand::{thread_rng, Rng};
 use serde::Deserialize;
-use std::{fs, io, path::PathBuf, str::FromStr, fmt::Display};
+use std::{fs, io, path::PathBuf, str::FromStr};
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields)]
@@ -140,7 +140,8 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
             asset.description = c.description;
         }
         asset.homepage_url = c.homepage_url;
-        let dt = chrono::NaiveDateTime::parse_from_str(c.last_update.as_str(),"%Y-%m-%d %H:%M:%S%.6f");
+        let dt =
+            chrono::NaiveDateTime::parse_from_str(c.last_update.as_str(), "%Y-%m-%d %H:%M:%S%.6f");
         if let Ok(dtime) = dt {
             asset.last_update = dtime.format("%s").to_string().parse().unwrap();
         } else {
@@ -160,18 +161,21 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
 
         asset.dependencies = crate_dependencies
             .into_iter()
-            .map(|f| { 
-                let is_bevy = (f.crate_id.eq("bevy") || f.crate_id.eq("bevy_app")) && f.version.ends_with(".0");
+            .map(|f| {
+                let is_bevy = (f.crate_id.eq("bevy") || f.crate_id.eq("bevy_app"))
+                    && f.version.ends_with(".0");
                 let v = if is_bevy {
-                    f.version[..f.version.len()-2].to_string()
+                    f.version[..f.version.len() - 2].to_string()
                 } else {
                     f.version
-                }.replace("^", "");
+                }
+                .replace("^", "");
                 CrateDependency {
                     crate_id: f.crate_id,
                     version: v,
                     kind: f.kind,
-            }})
+                }
+            })
             .collect()
     }
 }

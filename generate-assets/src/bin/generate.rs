@@ -3,9 +3,10 @@ use cratesio_dbdump_lookup::CrateDependency;
 use rand::{prelude::SliceRandom, thread_rng};
 use serde::Serialize;
 use std::{
+    env,
     fs::{self, File},
     io::{self, prelude::*},
-    path::Path, env,
+    path::Path,
 };
 
 use generate_assets::*;
@@ -13,20 +14,26 @@ use generate_assets::*;
 fn main() -> io::Result<()> {
     let asset_dir = std::env::args().nth(1).unwrap();
     let content_dir = std::env::args().nth(2).unwrap();
-    let dir = env::current_dir();
-    println!("Dir : {:?}", dir);
-    let d = &format!("{}/{}", dir.unwrap().to_string_lossy(), "data");
-    let x = Path::new(d).exists();
-    println!("Data folder : {}", d);
-    println!("Data folder exists: {}", x);
+    let current_dir = env::current_dir();
+
+    let cache_dir = &format!("{}/{}", current_dir.unwrap().to_string_lossy(), "data");
+    let cache_exists = Path::new(cache_dir).exists();
+    println!("Using cache : {}", cache_exists);
+    if cache_exists {
+        println!("Cache from: {}", cache_dir);
+    } else {
+        println!("Downloading crates.io data dump");
+    }
 
     let _ = fs::create_dir(content_dir.clone());
 
     let db = &get_db().unwrap();
+    println!("Parsing Assets");
     let asset_root_section = parse_assets(&asset_dir, db)?;
 
     //Remove if folder already exist
     let _ = fs::remove_dir_all(format!("{}/{}", &content_dir, "assets"));
+    println!("Writing Assets");
     asset_root_section.write(Path::new(&content_dir), Path::new(""), 0)?;
     println!("Script Complete");
     Ok(())
@@ -88,7 +95,7 @@ impl From<&Asset> for FrontMatterAsset {
                 downloads: asset.downloads,
                 repo_url: asset.repo_url.clone(),
                 homepage_url: asset.homepage_url.clone(),
-                last_update: asset.last_update.clone(),
+                last_update: asset.last_update,
                 latest_version: asset.latest_version.clone(),
                 license: asset.license.clone(),
                 dependencies: asset.dependencies.clone(),

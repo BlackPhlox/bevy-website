@@ -17,6 +17,14 @@
         overflow-wrap: break-word;
     }
 
+    .card-shadow-title {
+        background-color: rgba(0, 0, 0, 0.2); 
+        height: 26px;color: white;
+        padding-left:0.7rem;
+        padding-right:0.7rem;
+        margin-top: -26px;
+    }
+
     .card-description {
         font-size: 1rem;
         height: initial;
@@ -62,6 +70,12 @@
     
     .last-update-tooltip:hover .last-update-tooltiptext {
         visibility: visible;
+    }
+
+    .emoji{
+        font-size:5rem;
+        width:100%;
+        text-align:center;
     }
 
     a {

@@ -6,15 +6,11 @@
         {% if post.extra.image %}
             <img src="{{ get_url(path=post.extra.image) }}" />
         {% else %}
-            {% if post.extra.emoji %}
-            <div style="font-size:5rem;width:100%;text-align:center;">{{post.extra.emoji}}</div>
-            {% else %}
-            <img src="https://via.placeholder.com/230x100" />
-            {% endif %}
+            <div class="emoji">{{post.extra.emoji}}</div>
         {% endif %}
         </div>
 
-        <div style="background-color: rgba(0, 0, 0, 0.2); height: 26px;color: white;padding-left:0.7rem;padding-right:0.7rem;margin-top: -26px;">{{ post.title }}</div>
+        <div class="card-shadow-title">{{ post.title }}</div>
 
         <div class="card-text card-asset-text">
             <!--<div class="card-title">{{ post.title }}</div>-->
@@ -24,12 +20,6 @@
 
             <div>
             <div>
-                {% for dep in post.extra.dependencies %}
-                    {% if dep.crate_id != "bevy" and dep.crate_id != "bevy_app" %}{% break %}{% endif %}
-                    <div class="chip">
-                        <span class="chip-content">{{ dep.version }}</span>
-                    </div> 
-                {% endfor %}
                 {% for tag in post.extra.tags %}
                     <div class="chip">
                         <span class="chip-content">{{ tag }}</span>
@@ -37,17 +27,17 @@
                 {% endfor %}
             </div>
             
-            <div style="font-size:10px; padding-top: 5px;">
+            <div style="font-size:10px; padding-top: 5px;display: inline-flex;">
                 {% if post.extra.downloads %}
                 <div style="color: white; ">
-                    <img src="assets/download.svg" style="width: 15px;vertical-align: middle;"></img>
+                    <img src="assets/download.svg" alt="crates.io downloads" style="width: 15px;vertical-align: middle;"></img>
                     {{ post.extra.downloads }}
                 </div>
                 {% endif %}
 
                 {% if post.extra.last_update %}
                     <div class="last-update last-update-tooltip" style="padding-top: 2.5px;">
-                        <img src="assets/last_update.svg" style="width: 15px;vertical-align: middle;"></img>
+                        <img src="assets/last_update.svg" alt="last updated" style="width: 15px;vertical-align: middle;"></img>
                         <span class="last-update-tooltiptext" id="{{ post.title | slugify }}-date-tt"></span>
                         <div id="{{ post.title | slugify }}-date"></div>
                         <script>
@@ -62,11 +52,21 @@
 
                 {% if post.extra.last_update %}
                     <div style="color: white;">
-                        <img src="assets/license2.svg" style="width: 15px;vertical-align: middle;"></img>
+                        <img src="assets/license2.svg" alt="license" style="width: 15px;vertical-align: middle;"></img>
                         {{ post.extra.license }}
                     </div>
                 {% endif %}
             </div>
+
+            {% for dep in post.extra.dependencies %}
+                {% if dep.crate_id != "bevy" and dep.crate_id != "bevy_app" %}{% break %}{% endif %}
+                <div style="color: white; ">
+                    <img src="assets/bevy_bird.svg" alt="bevy version" style="width: 15px;vertical-align: middle;"></img>
+                    <div class="chip">
+                        <span class="chip-content">{{ dep.version }}</span>
+                    </div> 
+                </div>
+            {% endfor %}
             </div>
         </div>
     </a>

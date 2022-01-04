@@ -132,7 +132,7 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
 
     let co = db.get_crate(&asset.name);
     if let Ok(Some(c)) = co {
-        let latest_version = &get_versions(&db, asset.name.to_string(), true).unwrap()[0];
+        let latest_version = &get_versions(db, asset.name.to_string(), true).unwrap()[0];
         asset.latest_version = latest_version.1.clone();
         let license = &latest_version.2;
         asset.license = license.to_string();
@@ -142,8 +142,8 @@ fn populate_with_crate_io_data(db: &Connection, asset: &mut Asset) {
         asset.homepage_url = c.homepage_url;
         let dt =
             chrono::NaiveDateTime::parse_from_str(c.last_update.as_str(), "%Y-%m-%d %H:%M:%S%.6f");
-        if let Ok(dtime) = dt {
-            asset.last_update = dtime.format("%s").to_string().parse().unwrap();
+        if let Ok(n_date_time) = dt {
+            asset.last_update = n_date_time.format("%s").to_string().parse().unwrap();
         } else {
             println!("{:?}", dt.unwrap_err());
         }

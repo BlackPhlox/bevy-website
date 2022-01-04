@@ -5,7 +5,7 @@ use serde::Serialize;
 use std::{
     fs::{self, File},
     io::{self, prelude::*},
-    path::Path,
+    path::Path, env,
 };
 
 use generate_assets::*;
@@ -13,6 +13,13 @@ use generate_assets::*;
 fn main() -> io::Result<()> {
     let asset_dir = std::env::args().nth(1).unwrap();
     let content_dir = std::env::args().nth(2).unwrap();
+    let dir = env::current_dir();
+    println!("Dir : {:?}", dir);
+    let d = &format!("{}/{}", dir.unwrap().to_string_lossy(), "data");
+    let x = Path::new(d).exists();
+    println!("Data folder : {}", d);
+    println!("Data folder exists: {}", x);
+
     let _ = fs::create_dir(content_dir.clone());
 
     let db = &get_db().unwrap();

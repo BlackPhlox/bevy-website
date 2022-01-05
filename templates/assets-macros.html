@@ -30,14 +30,14 @@
             <div style="font-size:10px; padding-top: 5px;display: inline-flex;">
                 {% if post.extra.downloads %}
                 <div style="color: white; ">
-                    <img src="assets/download.svg" alt="crates.io downloads" style="width: 15px;vertical-align: middle;"></img>
+                    <img src="download.svg" alt="crates.io downloads" style="width: 15px;vertical-align: middle;"></img>
                     {{ post.extra.downloads }}
                 </div>
                 {% endif %}
 
                 {% if post.extra.last_update %}
                     <div class="last-update last-update-tooltip" style="padding-top: 2.5px;">
-                        <img src="assets/last_update.svg" alt="last updated" style="width: 15px;vertical-align: middle;"></img>
+                        <img src="last_update.svg" alt="last updated" style="width: 15px;vertical-align: middle;"></img>
                         <span class="last-update-tooltiptext" id="{{ post.title | slugify }}-date-tt"></span>
                         <div id="{{ post.title | slugify }}-date"></div>
                         <script>
@@ -52,7 +52,7 @@
 
                 {% if post.extra.last_update %}
                     <div style="color: white;">
-                        <img src="assets/license2.svg" alt="license" style="width: 15px;vertical-align: middle;"></img>
+                        <img src="license2.svg" alt="license" style="width: 15px;vertical-align: middle;"></img>
                         {{ post.extra.license }}
                     </div>
                 {% endif %}
@@ -61,7 +61,7 @@
             {% for dep in post.extra.dependencies %}
                 {% if dep.crate_id != "bevy" and dep.crate_id != "bevy_app" %}{% break %}{% endif %}
                 <div style="color: white; ">
-                    <img src="assets/bevy_bird.svg" alt="bevy version" style="width: 15px;vertical-align: middle;"></img>
+                    <img src="bevy_bird.svg" alt="bevy version" style="width: 15px;vertical-align: middle;"></img>
                     <div class="chip">
                         <span class="chip-content">{{ dep.version }}</span>
                     </div> 

@@ -17,6 +17,7 @@
 
     .card {
         width: $card-width;
+        margin-right: $card-list-gap;
         height: $card-height;
         margin: 0;
     }

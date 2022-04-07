@@ -4,6 +4,7 @@ weight = 2
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 This section will help you get started on your Bevy journey as quickly as possible. It will walk you through setting up your development environment and writing a simple Bevy app.
@@ -29,7 +30,7 @@ Note: the "fast compiles" setup is on the next page, so you might want to read t
     # use the latest Bevy release
     git checkout latest
     # or a specific version
-    git checkout v0.5.0
+    git checkout v0.6.0
     ```
 4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
     ```sh
@@ -45,7 +46,7 @@ Add the bevy crate to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
-bevy = "0.5" # make sure this is the latest version
+bevy = "0.6" # make sure this is the latest version
 ```
 
 This is the current `bevy` crate version:

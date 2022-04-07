@@ -4,6 +4,7 @@ weight = 1
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 I know you are itching to start making games, but we need to do a _small_ amount of setup first.
@@ -63,7 +64,7 @@ fn main() {
 [package]
 name = "my_bevy_game"
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 ```
@@ -76,11 +77,21 @@ Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), th
 [package]
 name = "my_bevy_game"
 version = "0.1.0"
-edition = "2018"
+edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
 
 [dependencies]
-bevy = "0.5" # make sure this is the latest version
+bevy = "0.6" # make sure this is the latest version
 ```
+
+### Cargo Workspaces
+
+If you are using [Cargo Workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html), you will also need to add the resolver to your Cargo.toml file in the root directory:
+
+```toml
+[workspace]
+resolver = "2" # Important! wgpu/Bevy needs this!
+```
+
 ### Enable Fast Compiles (Optional)
 
 Bevy can be built just fine using default configuration on stable Rust. However for maximally fast iterative compiles, we recommend the following configuration:
@@ -92,7 +103,7 @@ Bevy can be built just fine using default configuration on stable Rust. However 
     If you don't want to add the `--features bevy/dynamic` to each run, this flag can permanently be set via `Cargo.toml`:
     ```toml
     [dependencies]
-    bevy = { version = "0.5.0", features = ["dynamic"] }
+    bevy = { version = "0.6.0", features = ["dynamic"] }
     ```
     NOTE: Remember to revert this before releasing your game! Otherwise you will need to include `libbevy_dylib` alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
 

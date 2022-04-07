@@ -106,7 +106,7 @@ fn visit_dirs(dir: PathBuf, section: &mut Section, db: &Connection) -> io::Resul
                 section.content.push(AssetNode::Section(new_section));
             } else {
                 if path.file_name().unwrap() == "_category.toml"
-                    || path.extension().unwrap() != "toml"
+                    || path.extension().expect("file must have an extension") != "toml"
                 {
                     continue;
                 }

@@ -4,6 +4,7 @@ weight = 5
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 **Entities** and **Components** are great for representing complex, query-able groups of data. But most Apps will also require "globally unique" data of some kind. In Bevy ECS, we represent globally unique data using **Resources**.
@@ -51,11 +52,11 @@ fn greet_people(
 Now all that's left is adding a `GreetTimer` Resource to our `HelloPlugin`:
 ```rs
 impl Plugin for HelloPlugin {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         // the reason we call from_seconds with the true flag is to make the timer repeat itself
         app.insert_resource(GreetTimer(Timer::from_seconds(2.0, true)))
-            .add_startup_system(add_people.system())
-            .add_system(greet_people.system());
+            .add_startup_system(add_people)
+            .add_system(greet_people);
     }
 }
 ```

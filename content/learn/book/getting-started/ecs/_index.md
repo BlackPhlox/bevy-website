@@ -4,6 +4,7 @@ weight = 3
 sort_by = "weight"
 template = "book-section.html"
 page_template = "book-section.html"
+insert_anchor_links = "right"
 +++
 
 All app logic in Bevy uses the Entity Component System paradigm, which is often shortened to ECS. ECS is a software pattern that involves breaking your program up into **Entities**, **Components**, and **Systems**. **Entities** are unique "things" that are assigned groups of **Components**, which are then processed using **Systems**.
@@ -15,8 +16,9 @@ The ECS pattern encourages clean, decoupled designs by forcing you to break up y
 ## Bevy ECS
 
 Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS implementations, which often require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
-* **Components**: normal Rust structs
+* **Components**: Rust structs that implement the `Component` trait
     ```rs
+    #[derive(Component)]
     struct Position { x: f32, y: f32 }
     ```
 * **Systems**: normal Rust functions
@@ -48,15 +50,13 @@ This will be our first system. The only remaining step is to add it to our App!
 
 ```rs
 fn main() {
-    App::build()
-        .add_system(hello_world.system())
+    App::new()
+        .add_system(hello_world)
         .run();
 }
 ```
 
-Note the `hello_world.system()` function call. This is a "trait extension method" that converts the `hello_world` function into the {{rust_type(type="trait" crate="bevy_ecs" mod="system" no_mod=true name="System")}} type.
-
-The {{rust_type(type="struct" crate="bevy_app", name="AppBuilder" method="add_system" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", mod="schedule" no_mod=true name="Schedule")}}, but we'll cover that more later.
+The {{rust_type(type="struct" crate="bevy_app", name="App" method="add_system" no_struct=true)}} function adds the system to your App's {{rust_type(type="struct", crate="bevy_ecs", mod="schedule" no_mod=true name="Schedule")}}, but we'll cover that more later.
 
 Now run your App again using `cargo run`. You should see `hello world!` printed once in your terminal.
 
@@ -67,12 +67,14 @@ Greeting the whole world is great, but what if we want to greet specific people?
 Add this struct to `main.rs`:
 
 ```rs
+#[derive(Component)]
 struct Person;
 ```
 
 But what if we want our people to have a name? In a more traditional design, we might just tack on a `name: String` field to `Person`. But other entities might have names too! For example, dogs should probably also have a name. It often makes sense to break datatypes up in to small pieces to encourage code reuse. So let's make `Name` its own component:
 
 ```rs
+#[derive(Component)]
 struct Name(String);
 ```
 
@@ -90,9 +92,9 @@ Now register the startup system like this:
 
 ```rs
 fn main() {
-    App::build()
-        .add_startup_system(add_people.system())
-        .add_system(hello_world.system())
+    App::new()
+        .add_startup_system(add_people)
+        .add_system(hello_world)
         .run();
 }
 ```
@@ -115,10 +117,10 @@ Now we just register the system in our App:
 
 ```rs
 fn main() {
-    App::build()
-        .add_startup_system(add_people.system())
-        .add_system(hello_world.system())
-        .add_system(greet_people.system())
+    App::new()
+        .add_startup_system(add_people)
+        .add_system(hello_world)
+        .add_system(greet_people)
         .run();
 }
 ```
